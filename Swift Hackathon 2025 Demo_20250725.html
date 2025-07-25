@@ -1,0 +1,2378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universal Financial Bridge Platform - Swift Hackathon 2025</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0d1b5e 0%, #1a237e 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: rgba(13, 27, 94, 0.95);
+            color: white;
+            padding: 20px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .company-logo {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 8px;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header-badge {
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+            transition: grid-template-columns 0.3s ease;
+        }
+
+        .dashboard-grid.sidebar-collapsed {
+            grid-template-columns: 80px 1fr;
+        }
+
+        .sidebar {
+            background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            height: fit-content;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            min-width: 320px;
+        }
+
+        .sidebar h3 {
+            color: white;
+        }
+
+        .sidebar.collapsed {
+            min-width: 80px;
+            width: 80px;
+            padding: 15px 10px;
+        }
+
+        .sidebar.collapsed .nav-text {
+            display: none;
+        }
+
+        .sidebar.collapsed .nav-icon {
+            font-size: 20px;
+            text-align: center;
+        }
+
+        .sidebar.collapsed h3 {
+            display: none;
+        }
+
+        .sidebar.collapsed .nav-item {
+            justify-content: center;
+            padding: 15px 10px;
+        }
+
+        .sidebar.collapsed .sidebar-toggle {
+            right: 10px;
+            top: 10px;
+        }
+
+        .sidebar-toggle {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .nav-item {
+            padding: 15px 20px;
+            margin: 5px 0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-item .nav-text {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .nav-item .nav-text div {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .nav-item.active .nav-text {
+            color: white;
+        }
+
+        .nav-item.active .nav-text div {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .main-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            min-height: 600px;
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .system-status {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .status-card {
+            background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .status-number {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .layer-card {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 15px 0;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .layer-card:hover {
+            border-color: #1a237e;
+            box-shadow: 0 4px 20px rgba(26, 35, 126, 0.1);
+        }
+
+        .layer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .layer-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a237e;
+        }
+
+        .layer-status {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-online {
+            background: #4caf50;
+            color: white;
+        }
+
+        .status-processing {
+            background: #ff9800;
+            color: white;
+        }
+
+        .status-idle {
+            background: #9e9e9e;
+            color: white;
+        }
+
+        /* Nexus特定樣式 */
+        .nexus-countries-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .nexus-country-card {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .nexus-country-card:hover {
+            border-color: #1a237e;
+            box-shadow: 0 4px 15px rgba(26, 35, 126, 0.1);
+        }
+
+        .country-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .country-flag {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+
+        .country-info h4 {
+            margin: 0;
+            font-size: 16px;
+            color: #1a237e;
+        }
+
+        .currency-code {
+            font-size: 12px;
+            color: #666;
+            background: #f8f9fa;
+            padding: 2px 6px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-top: 2px;
+        }
+
+        .status-indicator {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-left: auto;
+        }
+
+        .status-indicator.connected {
+            background: #4caf50;
+            color: white;
+        }
+
+        .country-metrics {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+        }
+
+        .metric {
+            text-align: center;
+        }
+
+        .metric-label {
+            font-size: 11px;
+            color: #666;
+            margin-bottom: 2px;
+        }
+
+        .metric-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a237e;
+        }
+
+        .proxy-types {
+            border-top: 1px solid #e9ecef;
+            padding-top: 10px;
+        }
+
+        .proxy-label {
+            font-size: 11px;
+            color: #666;
+            margin-right: 5px;
+        }
+
+        .proxy-tag {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 10px;
+            margin-right: 4px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #1a237e;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(26, 35, 126, 0.3);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .nexus-pay-btn {
+            background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+        }
+
+        .amount-input-group {
+            display: flex;
+            align-items: center;
+        }
+
+        .currency-label {
+            background: #1a237e;
+            color: white;
+            padding: 12px 15px;
+            border-radius: 0 8px 8px 0;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: -1px;
+        }
+
+        .fx-rate-display {
+            font-size: 12px;
+            color: #4caf50;
+            margin-top: 5px;
+            font-weight: 600;
+        }
+
+        .proxy-input-group {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .proxy-type-select {
+            font-size: 12px;
+        }
+
+        .transaction-log {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .log-entry {
+            padding: 10px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 5px;
+            border-left: 4px solid #1a237e;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+        }
+
+        .nexus-log-entry {
+            padding: 8px 12px;
+            margin: 3px 0;
+            background: white;
+            border-radius: 6px;
+            border-left: 4px solid #4caf50;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+        }
+
+        .log-timestamp {
+            color: #666;
+            margin-right: 10px;
+            font-size: 10px;
+        }
+
+        .log-content {
+            color: #333;
+        }
+
+        .iso-message {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+
+        .nexus-success-card {
+            background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .success-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .success-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .success-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .success-metric {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        .success-metric .metric-label {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+
+        .success-metric .metric-value {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4caf50 0%, #66bb6a 100%);
+            transition: width 0.3s ease;
+        }
+
+        .alert {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        /* Enhanced Security Result Display */
+        .security-result-container {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+            border: 1px solid #dee2e6;
+        }
+
+        .security-result-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .security-result-header .success-icon {
+            font-size: 24px;
+            color: #4caf50;
+        }
+
+        .security-result-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a237e;
+            margin: 0;
+        }
+
+        .security-result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .security-result-item {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            border-left: 4px solid #4caf50;
+        }
+
+        .security-result-item .label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .security-result-item .value {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #333;
+            word-break: break-all;
+            line-height: 1.4;
+        }
+
+        .security-result-footer {
+            background: rgba(76, 175, 80, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            border-left: 4px solid #4caf50;
+        }
+
+        .security-result-footer .checkmark {
+            color: #4caf50;
+            margin-right: 8px;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .processing {
+            animation: pulse 1.5s infinite;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        /* Swift API 增強樣式 */
+        .swift-api-container {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .api-endpoint {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            margin: 10px 0;
+        }
+
+        /* TEE 監控樣式 */
+        .tee-processing-container {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .tee-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .tee-status-indicator {
+            background: #ff9800;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .tee-status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .tee-metric {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #e9ecef;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .dashboard-grid.sidebar-collapsed {
+                grid-template-columns: 1fr;
+            }
+            
+            .grid-2, .grid-3 {
+                grid-template-columns: 1fr;
+            }
+            
+            .nexus-countries-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar.collapsed {
+                width: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="company-logo">
+                    <img src="https://aimichia.com/logo-icon.png" alt="AIMICHIA Logo" style="width: 100%; height: 100%; object-fit: contain;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <svg style="width: 100%; height: 100%; fill: #1a237e; display: none;" viewBox="0 0 100 100">
+                        <path d="M15,5 L40,5 L40,25 L25,35 L40,45 L40,65 L15,65 L15,45 L25,35 L15,25 Z M60,25 L75,35 L60,45 L60,65 L85,65 L85,45 L75,35 L85,25 L85,5 L60,5 Z M50,35 C55,30 50,25 45,30 C40,25 35,30 40,35 C35,40 40,45 45,40 C50,45 55,40 50,35 Z M25,70 C35,75 40,85 50,85 C60,85 65,75 75,70 C70,80 60,90 50,90 C40,90 30,80 25,70 Z"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1 style="font-size: 24px; margin-bottom: 5px;">Universal Financial Bridge Platform</h1>
+                    <p style="font-size: 14px; opacity: 0.8;">AIMICHIA TECHNOLOGY CO., LTD.</p>
+                </div>
+            </div>
+            <div class="header-badge">
+                <div>POC System v1.0</div>
+                <div style="font-size: 10px; margin-top: 2px;">Swift Hackathon 2025</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="dashboard-grid" id="dashboard-grid">
+            <div class="sidebar" id="sidebar">
+                <button class="sidebar-toggle" onclick="toggleSidebar()" title="Toggle Sidebar">
+                    <span id="toggle-icon">◂</span>
+                </button>
+                <h3 style="margin-bottom: 20px; color: white;">System Navigation</h3>
+                <div class="nav-item active" onclick="showSection('dashboard')">
+                    <span class="nav-icon">📊</span>
+                    <div class="nav-text">
+                        <strong>Dashboard</strong>
+                        <div style="font-size: 12px;">System Overview</div>
+                    </div>
+                </div>
+                <div class="nav-item" onclick="showSection('nexus-demo')">
+                    <span class="nav-icon">🌍</span>
+                    <div class="nav-text">
+                        <strong>Cross-border Integration</strong>
+                        <div style="font-size: 12px;">Instant Cross-border Payments</div>
+                    </div>
+                </div>
+                <div class="nav-item" onclick="showSection('layer1')">
+                    <span class="nav-icon">🔌</span>
+                    <div class="nav-text">
+                        <strong>Layer 1: Financial APIs</strong>
+                        <div style="font-size: 12px;">Services Integration</div>
+                    </div>
+                </div>
+                <div class="nav-item" onclick="showSection('layer2')">
+                    <span class="nav-icon">📄</span>
+                    <div class="nav-text">
+                        <strong>Layer 2: ISO 20022</strong>
+                        <div style="font-size: 12px;">Message Processing</div>
+                    </div>
+                </div>
+                <div class="nav-item" onclick="showSection('layer3')">
+                    <span class="nav-icon">⛓️</span>
+                    <div class="nav-text">
+                        <strong>Layer 3: Blockchain</strong>
+                        <div style="font-size: 12px;">Smart Contracts</div>
+                    </div>
+                </div>
+                <div class="nav-item" onclick="showSection('layer4')">
+                    <span class="nav-icon">🔒</span>
+                    <div class="nav-text">
+                        <strong>Layer 4: RISC-V Security</strong>
+                        <div style="font-size: 12px;">Hardware Security</div>
+                    </div>
+                </div>
+                <div class="nav-item" onclick="showSection('demo')">
+                    <span class="nav-icon">🚀</span>
+                    <div class="nav-text">
+                        <strong>End-to-End Demo</strong>
+                        <div style="font-size: 12px;">Complete Transaction Flow</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="main-content">
+                <!-- Dashboard Section -->
+                <div class="content-section active" id="dashboard">
+                    <h2 style="margin-bottom: 30px; color: #1a237e;">
+                        System Dashboard
+                        <span style="font-size: 14px; background: #4caf50; color: white; padding: 4px 8px; border-radius: 4px; margin-left: 10px;">
+                            BIS Nexus Ready
+                        </span>
+                    </h2>
+                    
+                    <div class="system-status">
+                        <div class="status-card">
+                            <div class="status-number" id="total-transactions">347</div>
+                            <div>Nexus Transactions</div>
+                        </div>
+                        <div class="status-card">
+                            <div class="status-number" id="connected-countries">5</div>
+                            <div>Connected Countries</div>
+                        </div>
+                        <div class="status-card">
+                            <div class="status-number" id="avg-processing-time">58s</div>
+                            <div>Avg Processing Time</div>
+                        </div>
+                        <div class="status-card">
+                            <div class="status-number" id="security-level">EAL5+</div>
+                            <div>RISC-V Security Level</div>
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div>
+                            <h3 style="margin-bottom: 20px; color: #1a237e;">BIS Nexus Integration Status</h3>
+                            
+                            <div class="layer-card">
+                                <div class="layer-header">
+                                    <div class="layer-title">🌍 Nexus Gateway</div>
+                                    <div class="layer-status status-online">CONNECTED</div>
+                                </div>
+                                <div style="font-size: 14px; color: #666;">
+                                    Connected to 5 ASEAN countries via standardized APIs and ISO 20022
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 98%;"></div>
+                                </div>
+                            </div>
+
+                            <div class="layer-card">
+                                <div class="layer-header">
+                                    <div class="layer-title">⚡ Layer 1: Swift API</div>
+                                    <div class="layer-status status-online">ONLINE</div>
+                                </div>
+                                <div style="font-size: 14px; color: #666;">
+                                    SwiftRef, GPI Tracking, Payment Initiation, Universal Confirmations
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 95%;"></div>
+                                </div>
+                            </div>
+
+                            <div class="layer-card">
+                                <div class="layer-header">
+                                    <div class="layer-title">📄 Layer 2: ISO 20022</div>
+                                    <div class="layer-status status-online">ONLINE</div>
+                                </div>
+                                <div style="font-size: 14px; color: #666;">
+                                    Enhanced with Nexus pacs.008/pacs.002 message support
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 97%;"></div>
+                                </div>
+                            </div>
+
+                            <div class="layer-card">
+                                <div class="layer-header">
+                                    <div class="layer-title">🔒 Layer 4: RISC-V TEE</div>
+                                    <div class="layer-status status-online">SECURED</div>
+                                </div>
+                                <div style="font-size: 14px; color: #666;">
+                                    Hardware-level security for cross-border transaction signing
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 99%;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 style="margin-bottom: 20px; color: #1a237e;">Recent Nexus Activity</h3>
+                            <div class="transaction-log" id="recent-activity">
+                                <div class="log-entry">[2025-07-25 14:32:15] 🌍 Nexus: TWD→SGD cross-border payment completed in 56s</div>
+                                <div class="log-entry">[2025-07-25 14:31:45] 🔒 RISC-V TEE: Cross-border transaction signed with hardware keys</div>
+                                <div class="log-entry">[2025-07-25 14:31:30] 📄 ISO 20022: pacs.008 message converted for Singapore PayNow</div>
+                                <div class="log-entry">[2025-07-25 14:31:12] 💱 Nexus: FX rate locked TWD/SGD @ 0.04167 for 60 seconds</div>
+                                <div class="log-entry">[2025-07-25 14:30:58] 🔍 Nexus: AML/CFT compliance screening passed</div>
+                                <div class="log-entry">[2025-07-25 14:30:45] 🌐 Nexus Gateway: pacs.008 received from Taiwan FISC</div>
+                                <div class="log-entry">[2025-07-25 14:30:30] ⚡ Swift API: BIC validation successful - DBSSSGSGXXX</div>
+                                <div class="log-entry">[2025-07-25 14:30:15] 🔐 Layer 1: OAuth 2.0 authentication successful</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BIS Nexus Integration Section -->
+                <div class="content-section" id="nexus-demo">
+                    <h2 style="margin-bottom: 30px; color: #1a237e;">
+                        BIS Nexus Cross-border Integration
+                        <span style="font-size: 14px; background: #4caf50; color: white; padding: 4px 8px; border-radius: 4px; margin-left: 10px;">
+                            60-Second Target
+                        </span>
+                    </h2>
+                    
+                    <div class="alert alert-info">
+                        <strong>🌍 Project Nexus Integration:</strong> Enabling instant cross-border payments between ASEAN-5 countries via standardized APIs and ISO 20022 messaging, coordinated through BIS Nexus Gateway infrastructure.
+                    </div>
+
+                    <!-- Nexus Network Status -->
+                    <div style="margin: 30px 0;">
+                        <h3 style="margin-bottom: 20px; color: #1a237e;">Connected Payment Systems (ASEAN-5)</h3>
+                        <div class="nexus-countries-grid" id="nexus-countries">
+                            <!-- Countries will be dynamically loaded -->
+                        </div>
+                    </div>
+
+                    <!-- Cross-border Payment Demo -->
+                    <div class="grid-2">
+                        <div>
+                            <h3 style="margin-bottom: 20px; color: #1a237e;">Instant Cross-border Payment</h3>
+                            <div class="nexus-payment-form">
+                                <div class="form-group">
+                                    <label class="form-label">Source Country</label>
+                                    <select class="form-input" id="nexus-source-country">
+                                        <option value="TWD">🇹🇼 Taiwan (FISC) - TWD</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Destination Country</label>
+                                    <select class="form-input" id="nexus-dest-country" onchange="updateFXRate()">
+                                        <option value="SGD">🇸🇬 Singapore (PayNow) - SGD</option>
+                                        <option value="THB">🇹🇭 Thailand (PromptPay) - THB</option>
+                                        <option value="MYR">🇲🇾 Malaysia (DuitNow) - MYR</option>
+                                        <option value="PHP">🇵🇭 Philippines (InstaPay) - PHP</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Amount</label>
+                                    <div class="amount-input-group">
+                                        <input type="number" class="form-input" id="nexus-amount" value="50000" onchange="updateFXRate()">
+                                        <span class="currency-label" id="source-currency">TWD</span>
+                                    </div>
+                                    <div class="fx-rate-display" id="fx-rate-display">
+                                        ≈ SGD 2,083.33 (Rate: 1 TWD = 0.04167 SGD)
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Recipient Proxy</label>
+                                    <div class="proxy-input-group">
+                                        <select class="form-input proxy-type-select" id="proxy-type">
+                                            <option value="mobile">Mobile</option>
+                                            <option value="email">Email</option>
+                                            <option value="nric">NRIC</option>
+                                        </select>
+                                        <input type="text" class="form-input" id="proxy-value" placeholder="+65 9123 4567">
+                                    </div>
+                                    <button class="btn btn-secondary" onclick="resolveProxy()">Resolve Proxy via Nexus</button>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Purpose of Payment</label>
+                                    <select class="form-input" id="payment-purpose">
+                                        <option value="SUPP">Supply Chain Finance</option>
+                                        <option value="SALA">Salary Payment</option>
+                                        <option value="TRAD">Trade Settlement</option>
+                                        <option value="INVS">Investment</option>
+                                    </select>
+                                </div>
+                                
+                                <button class="btn btn-primary nexus-pay-btn" onclick="startNexusPayment()">
+                                    🚀 Start Nexus Cross-border Payment
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 style="margin-bottom: 20px; color: #1a237e;">Processing Status</h3>
+                            <div id="nexus-processing-status">
+                                <div class="alert alert-info">
+                                    Ready to process cross-border payment via BIS Nexus. Click "Start Nexus Cross-border Payment" to begin demonstration.
+                                </div>
+                            </div>
+                            
+                            <div style="margin-top: 20px;">
+                                <div style="margin-bottom: 10px; font-weight: 600;">Nexus Processing Progress</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="nexus-progress-bar" style="width: 0%;"></div>
+                                </div>
+                                <div style="font-size: 12px; color: #666; margin-top: 5px;" id="nexus-progress-text">Waiting to start...</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 30px;">
+                        <h3 style="margin-bottom: 20px; color: #1a237e;">Live Nexus Transaction Log</h3>
+                        <div class="transaction-log" id="nexus-log">
+                            <div class="nexus-log-entry">
+                                <span class="log-timestamp">[Ready]</span>
+                                <span class="log-content">🌍 BIS Nexus Gateway ready for cross-border payments</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Enhanced Layer 1 Section -->
+                <div class="content-section" id="layer1">
+                    <h2 style="margin-bottom: 30px; color: #1a237e;">Layer 1: Swift Financial Services Integration</h2>
+                    
+                    <div class="alert alert-info">
+                        <strong>Enhanced Swift Integration:</strong> Direct integration with Swift API ecosystem including SwiftRef, GPI Tracking, Payment Initiation, and Universal Confirmations for seamless interoperability.
+                    </div>
+                    
+                    <div class="grid-3">
+                        <div class="layer-card">
+                            <h4 style="color: #1a237e; margin-bottom: 15px;">SwiftRef API</h4>
+                            <div style="font-size: 14px; color: #666; margin-bottom: 15px;">
+                                BIC validation, Institution lookup, Country code verification
+                            </div>
+                            <div class="api-endpoint">GET /swiftref/bic-validation</div>
+                            <button class="btn btn-primary" onclick="testSwiftAPI('bic-validation')">Test BIC Validation</button>
+                        </div>
+                        
+                        <div class="layer-card">
+                            <h4 style="color: #1a237e; margin-bottom: 15px;">GPI Tracking API</h4>
+                            <div style="font-size: 14px; color: #666; margin-bottom: 15px;">
+                                Real-time payment tracking, Status updates, Charge transparency
+                            </div>
+                            <div class="api-endpoint">GET /gpi/payment-tracking</div>
+                            <button class="btn btn-primary" onclick="testSwiftAPI('gpi-tracking')">Test GPI Tracking</button>
+                        </div>
+                        
+                        <div class="layer-card">
+                            <h4 style="color: #1a237e; margin-bottom: 15px;">Payment Initiation API</h4>
+                            <div style="font-size: 14px; color: #666; margin-bottom: 15px;">
+                                Payment instruction submission, Validation, Processing
+                            </div>
+                            <div class="api-endpoint">POST /payment-initiation</div>
+                            <button class="btn btn-primary" onclick="testSwiftAPI('payment-initiation')">Test Payment API</button>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 30px;">
+                        <h3 style="margin-bottom: 20px; color: #1a237e;">Swift API Configuration</h3>
+                        <div class="swift-api-container">
+                            <div class="grid-2">
+                                <div>
+                                    <div class="form-group">
+                                        <label class="form-label">Swift Environment</label>
+                                        <input type="text" class="form-input" value="Sandbox (Test Environment)" readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Authentication</label>
+                                        <input type="text" class="form-input" value="OAuth 2.0 + LAU (Logical Access Unit)" readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">API Version</label>
+                                        <input type="text" class="form-input" value="v1.0 (Swift API Standards)" readonly>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="form-group">
+                                        <label class="form-label">Message Standards</label>
+                                        <input type="text" class="form-input" value="ISO 20022 + Swift MT" readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Rate Limiting</label>
+                                        <input type="text" class="form-input" value="500 requests/minute" readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">SLA Compliance</label>
+                                        <input type="text" class="form-input" value="99.9% uptime guarantee" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="api-test-result" style="margin-top: 20px;"></div>
+                </div>
+
+                <!-- Enhanced Layer 2 Section -->
+                <div class="content-section" id="layer2">
+                    <h2 style="margin-bottom: 30px; color: #1a237e;">Layer 2: Enhanced ISO 20022 Message Processing</h2>
+                    
+                    <div class="alert alert-info">
+                        <strong>Nexus-Enhanced ISO 20022:</strong> Full support for BIS Nexus cross-border payment messages with enhanced pacs.008/pacs.002 processing for instant settlement coordination.
+                    </div>
+                    
+                    <div class="grid-2">
+                        <div>
+                            <h3 style="margin-bottom: 20px; color: #1a237e;">Nexus-Enhanced Message Types</h3>
+                            <div class="layer-card">
+                                <h4 style="color: #1a237e;">pacs - Enhanced for Nexus</h4>
+                                <div style="font-size: 14px; color: #666;">
+                                    ✓ pacs.008.001.12 - Customer Credit Transfer (Nexus Enhanced)<br>
+                                    ✓ pacs.002.001.14 - Payment Status Report (Cross-border)<br>
+                                    ✓ pacs.004.001.12 - Payment Return (Multi-currency)<br>
+                                    ✓ Nexus Gateway Message Extensions
+                                </div>
+                            </div>
+                            
+                            <div class="layer-card">
+                                <h4 style="color: #1a237e;">camt - Cash Management</h4>
+                                <div style="font-size: 14px; color: #666;">
+                                    ✓ camt.053.001.11 - Bank to Customer Statement<br>
+                                    ✓ camt.054.001.11 - Bank to Customer Debit/Credit<br>
+                                    ✓ camt.052.001.11 - Bank to Customer Account Report<br>
+                                    ✓ FX Rate Integration for Cross-border
+                                </div>
+                            </div>
+                            
+                            <div class="layer-card">
+                                <h4 style="color: #1a237e;">Swift MT Conversion</h4>
+                                <div style="font-size: 14px; color: #666;">
+                                    ✓ MT103 ↔ pacs.008 Bidirectional<br>
+                                    ✓ MT900/910 ↔ camt.054<br>
+                                    ✓ MT202 ↔ pacs.009 (FI to FI)<br>
+                                    ✓ Semantic Preservation Guarantee
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 style="margin-bottom: 20px; color: #1a237e;">Nexus Message Converter</h3>
+                            <div class="form-group">
+                                <label class="form-label">Input Format</label>
+                                <select class="form-input" id="input-format">
+                                    <option value="swift-mt">Swift MT Format</option>
+                                    <option value="iso20022">ISO 20022 XML</option>
+                                    <option value="nexus-enhanced">Nexus Enhanced pacs.008</option>
+                                    <option value="json">JSON API</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Cross-border Payment Message</label>
+                                <textarea class="form-input" id="message-input" rows="8" placeholder="Enter cross-border payment message...">:20:NXS123456789
+:23B:CRED
+:32A:250725SGD2083.33
+:50K:TAIWAN SEMICONDUCTOR MFG
+HSINCHU, TAIWAN
+:52A:CTBCTWTP
+:56A:AIMICHUS33
+:57A:DBSSSGSG
+:59:/+65-9123-4567
+SINGAPORE TECH PTE LTD
+SINGAPORE
+:70:/RFB/SUPPLY CHAIN FINANCE
+:71A:SHA</textarea>
+                            </div>
+                            
+                            <button class="btn btn-primary" onclick="convertNexusMessage()">Convert to Nexus ISO 20022</button>
+                            
+                            <div id="conversion-result" style="margin-top: 20px;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Layer 3 Section -->
+                <div class="content-section" id="layer3">
+                    <h2 style="margin-bottom: 30px; color: #1a237e;">Layer 3: Smart Contracts & Tokenization</h2>
+                    
+                    <div class="grid-2">
+                        <div>
+                            <h3 style="margin-bottom: 20px; color: #1a237e;">Blockchain Network Status</h3>
+                            <div class="system-status">
+                                <div class="status-card">
+                                    <div class="status-number">1,347</div>
+                                    <div>Current Block</div>
+                                </div>
+                                <div class="status-card">
+                                    <div class="status-number">18</div>
+                                    <div>Active Nodes</div>
+                                </div>
+                                <div class="status-card">
+                                    <div class="status-number">2.8s</div>
+                                    <div>Block Time</div>
+                                </div>
+                                <div class="status-card">
+                                    <div class="status-number">99.8%</div>
+                                    <div>Consensus Rate</div>
+                                </div>
+                            </div>
+                            
+                            <h4 style="color: #1a237e; margin: 20px 0;">Network Configuration</h4>
+                            <div class="layer-card">
+                                <div><strong>Consensus:</strong> PBFT (Practical Byzantine Fault Tolerance)</div>
+                                <div><strong>Network:</strong> Permissioned Consortium</div>
+                                <div><strong>Block Size:</strong> 2MB</div>
+                                <div><strong>Throughput:</strong> 15,000+ TPS</div>
+                                <div><strong>Smart Contracts:</strong> Solidity + Vyper</div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 style="margin-bottom: 20px; color: #1a237e;">Asset Tokenization</h3>
+                            <div class="form-group">
+                                <label class="form-label">Asset Type</label>
+                                <select class="form-input" id="asset-type">
+                                    <option value="bond">Corporate Bond</option>
+                                    <option value="stock">Common Stock</option>
+                                    <option value="note">Promissory Note</option>
+                                    <option value="cd">Certificate of Deposit</option>
+                                    <option value="fx-forward">FX Forward Contract</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">ISIN Code</label>
+                                <input type="text" class="form-input" id="isin-code" placeholder="TW0001234567">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Nominal Value (USD)</label>
+                                <input type="number" class="form-input" id="nominal-value" placeholder="1000000">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Maturity Date</label>
+                                <input type="date" class="form-input" id="maturity-date">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Issuer</label>
+                                <input type="text" class="form-input" id="issuer" placeholder="AIMICHIA TECHNOLOGY CO., LTD.">
+                            </div>
+                            
+                            <button class="btn btn-primary" onclick="tokenizeAsset()">Tokenize Asset</button>
+                            
+                            <div id="tokenization-result" style="margin-top: 20px;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Enhanced Layer 4 Section -->
+                <div class="content-section" id="layer4">
+                    <h2 style="margin-bottom: 30px; color: #1a237e;">Layer 4: RISC-V Hardware Security Execution</h2>
+                    
+                    <div class="alert alert-info">
+                        <strong>RISC-V TEE Enhancement:</strong> Hardware-level security for cross-border transactions with Keystone Enclave integration and real-time hardware security monitoring.
+                    </div>
+                    
+                    <div class="grid-2">
+                        <div>
+                            <h3 style="margin-bottom: 20px; color: #1a237e;">Hardware Security Module</h3>
+                            <div class="tee-status-grid">
+                                <div class="tee-metric">
+                                    <div class="metric-value">EAL5+</div>
+                                    <div class="metric-label">Security Level</div>
+                                </div>
+                                <div class="tee-metric">
+                                    <div class="metric-value">256</div>
+                                    <div class="metric-label">Key Strength</div>
+                                </div>
+                                <div class="tee-metric">
+                                    <div class="metric-value">99.99%</div>
+                                    <div class="metric-label">TEE Uptime</div>
+                                </div>
+                                <div class="tee-metric">
+                                    <div class="metric-value">947</div>
+                                    <div class="metric-label">Keys Managed</div>
+                                </div>
+                                <div class="tee-metric">
+                                    <div class="metric-value">3</div>
+                                    <div class="metric-label">Active Enclaves</div>
+                                </div>
+                                <div class="tee-metric">
+                                    <div class="metric-value">847</div>
+                                    <div class="metric-label">Signatures/Hr</div>
+                                </div>
+                            </div>
+                            
+                            <h4 style="color: #1a237e; margin: 20px 0;">RISC-V TEE Features</h4>
+                            <div class="layer-card">
+                                <div><strong>Architecture:</strong> RISC-V with Keystone Enclave</div>
+                                <div><strong>RNG:</strong> Hardware True Random Number Generator</div>
+                                <div><strong>Memory Protection:</strong> MPU + PMP Enabled</div>
+                                <div><strong>Secure Boot:</strong> Verified Boot Chain</div>
+                                <div><strong>Attestation:</strong> Remote Attestation Support</div>
+                                <div><strong>Cross-border:</strong> Multi-currency signature support</div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 style="margin-bottom: 20px; color: #1a237e;">Enhanced Security Operations</h3>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Operation Type</label>
+                                <select class="form-input" id="security-operation">
+                                    <option value="generate">Generate Cross-border Key Pair</option>
+                                    <option value="sign">Sign Nexus Transaction</option>
+                                    <option value="verify">Verify Cross-border Signature</option>
+                                    <option value="encrypt">Encrypt Payment Data</option>
+                                    <option value="attest">Generate TEE Attestation</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Key Algorithm</label>
+                                <select class="form-input" id="key-algorithm">
+                                    <option value="ecdsa">ECDSA P-256 (Nexus Standard)</option>
+                                    <option value="eddsa">EdDSA Ed25519</option>
+                                    <option value="rsa">RSA-4096</option>
+                                    <option value="sm2">SM2 (Chinese Standard)</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Transaction Data</label>
+                                <textarea class="form-input" id="security-data" rows="6" placeholder="Enter cross-border transaction data...">TWD 50000 -> SGD 2083.33
+From: Taiwan FISC
+To: Singapore PayNow
+Purpose: Supply Chain Finance
+UETR: 12345678-1234-4000-8000-123456789abc</textarea>
+                            </div>
+                            
+                            <button class="btn btn-primary" onclick="executeEnhancedSecurityOperation()">Execute in RISC-V TEE</button>
+                            
+                            <div id="security-result" style="margin-top: 20px;"></div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 30px;">
+                        <h3 style="margin-bottom: 20px; color: #1a237e;">TEE Audit Trail</h3>
+                        <div class="transaction-log">
+                            <div class="log-entry">[2025-07-25 14:35:20] TEE: Cross-border key pair generated - ECDSA P-256</div>
+                            <div class="log-entry">[2025-07-25 14:35:18] TEE: Nexus transaction signed - Hash: 0x7f3a8b...</div>
+                            <div class="log-entry">[2025-07-25 14:35:15] TEE: Multi-currency signature validation passed</div>
+                            <div class="log-entry">[2025-07-25 14:35:12] TEE: Hardware random entropy collected - 256 bits</div>
+                            <div class="log-entry">[2025-07-25 14:35:10] TEE: Cross-border memory protection activated</div>
+                            <div class="log-entry">[2025-07-25 14:35:08] TEE: Keystone enclave attestation completed</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Enhanced Demo Section -->
+                <div class="content-section" id="demo">
+                    <h2 style="margin-bottom: 30px; color: #1a237e;">Complete End-to-End Demo: Nexus Cross-border Transaction</h2>
+                    
+                    <div class="alert alert-info">
+                        <strong>Demo Scenario:</strong> Taiwan enterprise payment to Singapore supplier via BIS Nexus - demonstrating full four-layer architecture integration with 60-second processing target.
+                    </div>
+                    
+                    <div class="grid-2">
+                        <div>
+                            <h3 style="margin-bottom: 20px; color: #1a237e;">Complete Transaction Parameters</h3>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Transaction Scenario</label>
+                                <select class="form-input" id="demo-tx-type">
+                                    <option value="nexus-cross-border">Nexus Cross-border Payment</option>
+                                    <option value="bond-tokenization">Corporate Bond Tokenization</option>
+                                    <option value="multi-currency-settlement">Multi-currency Settlement</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Amount (TWD)</label>
+                                <input type="number" class="form-input" id="demo-amount" value="50000">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">From Institution</label>
+                                <input type="text" class="form-input" id="demo-from" value="Taiwan FISC (ACH)">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">To Institution</label>
+                                <input type="text" class="form-input" id="demo-to" value="Singapore PayNow">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Nexus Route</label>
+                                <input type="text" class="form-input" id="demo-route" value="TWD → Nexus Gateway → SGD">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Business Purpose</label>
+                                <input type="text" class="form-input" id="demo-purpose" value="Supply Chain Finance - TSMC to Singapore Supplier">
+                            </div>
+                            
+                            <button class="btn btn-primary" onclick="startCompleteDemo()" style="width: 100%; margin-top: 20px;">
+                                🚀 Start Complete Nexus Demo (Target: 60s)
+                            </button>
+                        </div>
+                        
+                        <div>
+                            <h3 style="margin-bottom: 20px; color: #1a237e;">Four-Layer Processing Status</h3>
+                            <div id="demo-status">
+                                <div class="alert alert-info">
+                                    Ready to demonstrate complete four-layer Nexus integration. Click "Start Complete Nexus Demo" to begin full workflow demonstration.
+                                </div>
+                            </div>
+                            
+                            <div id="demo-progress" style="margin-top: 20px;">
+                                <div style="margin-bottom: 10px; font-weight: 600;">Complete Transaction Progress</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="demo-progress-bar" style="width: 0%;"></div>
+                                </div>
+                                <div style="font-size: 12px; color: #666; margin-top: 5px;" id="demo-progress-text">Waiting to start complete demo...</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 30px;">
+                        <h3 style="margin-bottom: 20px; color: #1a237e;">Complete System Integration Log</h3>
+                        <div class="transaction-log" id="demo-log">
+                            <div class="log-entry">System ready for complete four-layer Nexus integration demonstration</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for detailed views -->
+    <div class="modal" id="detailModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <div id="modal-content-body"></div>
+        </div>
+    </div>
+
+    <script>
+        // Enhanced global state management
+        let systemState = {
+            totalTransactions: 347,
+            connectedCountries: 5,
+            avgProcessingTime: 58,
+            currentBlock: 1347,
+            activeNodes: 18,
+            blockTime: 2.8,
+            consensusRate: 99.8,
+            keysManaged: 947,
+            nexusConnected: true
+        };
+
+        // Nexus countries data (ASEAN-5)
+        const nexusCountries = {
+            'TWD': {
+                name: 'Taiwan (FISC)',
+                currency: 'TWD',
+                status: 'CONNECTED',
+                latency: '45ms',
+                uptime: '99.9%',
+                proxyTypes: ['mobile', 'email', 'national_id'],
+                flag: '🇹🇼'
+            },
+            'SGD': {
+                name: 'Singapore (PayNow)',
+                currency: 'SGD', 
+                status: 'CONNECTED',
+                latency: '52ms',
+                uptime: '99.8%',
+                proxyTypes: ['mobile', 'nric', 'uen'],
+                flag: '🇸🇬'
+            },
+            'THB': {
+                name: 'Thailand (PromptPay)',
+                currency: 'THB',
+                status: 'CONNECTED', 
+                latency: '68ms',
+                uptime: '99.7%',
+                proxyTypes: ['mobile', 'national_id', 'email'],
+                flag: '🇹🇭'
+            },
+            'MYR': {
+                name: 'Malaysia (DuitNow)',
+                currency: 'MYR',
+                status: 'CONNECTED',
+                latency: '59ms', 
+                uptime: '99.6%',
+                proxyTypes: ['mobile', 'nric', 'army_id'],
+                flag: '🇲🇾'
+            },
+            'PHP': {
+                name: 'Philippines (InstaPay)',
+                currency: 'PHP',
+                status: 'CONNECTED',
+                latency: '71ms',
+                uptime: '99.5%',
+                proxyTypes: ['mobile', 'email'],
+                flag: '🇵🇭'
+            }
+        };
+
+        // FX rates for conversion
+        const fxRates = {
+            'SGD': 0.04167,
+            'THB': 1.2345,
+            'MYR': 0.1789,
+            'PHP': 2.4567
+        };
+
+        // Toggle sidebar function
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const dashboardGrid = document.getElementById('dashboard-grid');
+            const toggleIcon = document.getElementById('toggle-icon');
+            
+            console.log('Toggle sidebar called'); // 調試用
+            
+            sidebar.classList.toggle('collapsed');
+            
+            if (sidebar.classList.contains('collapsed')) {
+                toggleIcon.textContent = '▸';
+                dashboardGrid.style.gridTemplateColumns = '80px 1fr';
+                console.log('Sidebar collapsed'); // 調試用
+            } else {
+                toggleIcon.textContent = '◂';
+                dashboardGrid.style.gridTemplateColumns = '320px 1fr';
+                console.log('Sidebar expanded'); // 調試用
+            }
+        }
+
+        // Navigation functions
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            document.getElementById(sectionId).classList.add('active');
+            event.target.closest('.nav-item').classList.add('active');
+            
+            // Initialize section-specific content
+            if (sectionId === 'nexus-demo') {
+                renderNexusCountries();
+            }
+        }
+
+        // Render Nexus countries
+        function renderNexusCountries() {
+            const container = document.getElementById('nexus-countries');
+            container.innerHTML = '';
+            
+            Object.entries(nexusCountries).forEach(([code, country]) => {
+                const countryCard = document.createElement('div');
+                countryCard.className = 'nexus-country-card';
+                countryCard.innerHTML = `
+                    <div class="country-header">
+                        <div class="country-flag">${country.flag}</div>
+                        <div class="country-info">
+                            <h4>${country.name}</h4>
+                            <div class="currency-code">${country.currency}</div>
+                        </div>
+                        <div class="status-indicator connected">${country.status}</div>
+                    </div>
+                    <div class="country-metrics">
+                        <div class="metric">
+                            <div class="metric-label">Latency</div>
+                            <div class="metric-value">${country.latency}</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-label">Uptime</div>
+                            <div class="metric-value">${country.uptime}</div>
+                        </div>
+                    </div>
+                    <div class="proxy-types">
+                        <span class="proxy-label">Proxy Types:</span>
+                        ${country.proxyTypes.map(type => `<span class="proxy-tag">${type}</span>`).join('')}
+                    </div>
+                `;
+                container.appendChild(countryCard);
+            });
+        }
+
+        // Update FX rate display
+        function updateFXRate() {
+            const destCurrency = document.getElementById('nexus-dest-country').value;
+            const amount = parseFloat(document.getElementById('nexus-amount').value) || 0;
+            const rate = fxRates[destCurrency] || 1;
+            const convertedAmount = (amount * rate).toFixed(2);
+            
+            document.getElementById('fx-rate-display').innerHTML = 
+                `≈ ${destCurrency} ${Number(convertedAmount).toLocaleString()} (Rate: 1 TWD = ${rate} ${destCurrency})`;
+        }
+
+        // Proxy resolution function
+        async function resolveProxy() {
+            const proxyType = document.getElementById('proxy-type').value;
+            const proxyValue = document.getElementById('proxy-value').value;
+            const destCountry = document.getElementById('nexus-dest-country').value;
+            
+            if (!proxyValue) {
+                alert('Please enter proxy value');
+                return;
+            }
+            
+            showModal('proxy-resolution', `
+                <h3>🌍 Nexus Proxy Resolution</h3>
+                <div class="proxy-resolution-process">
+                    <div class="alert alert-info">
+                        <div class="processing">Querying ${destCountry} Proxy Directory via Nexus Gateway...</div>
+                    </div>
+                </div>
+                <div id="proxy-result"></div>
+            `);
+            
+            setTimeout(() => {
+                document.getElementById('proxy-result').innerHTML = `
+                    <div class="alert alert-success">
+                        <h4>✅ Proxy Resolved Successfully</h4>
+                        <div style="margin-top: 15px;">
+                            <div><strong>Account Holder:</strong> Singapore Tech Pte Ltd</div>
+                            <div><strong>Bank:</strong> DBS Bank Singapore</div>
+                            <div><strong>Account:</strong> ***-***-1234</div>
+                            <div><strong>Proxy Type:</strong> ${proxyType}</div>
+                            <div><strong>Proxy Value:</strong> ${proxyValue}</div>
+                            <div><strong>Resolution Time:</strong> 1.2 seconds</div>
+                        </div>
+                        <button class="btn btn-primary" onclick="closeModal()">Confirm & Continue</button>
+                    </div>
+                `;
+            }, 2000);
+        }
+
+        // Enhanced Nexus payment processing
+        async function startNexusPayment() {
+            const sourceCountry = document.getElementById('nexus-source-country').value;
+            const destCountry = document.getElementById('nexus-dest-country').value;
+            const amount = document.getElementById('nexus-amount').value;
+            const purpose = document.getElementById('payment-purpose').value;
+            
+            const statusDiv = document.getElementById('nexus-processing-status');
+            const progressBar = document.getElementById('nexus-progress-bar');
+            const logDiv = document.getElementById('nexus-log');
+            
+            // Clear previous logs
+            logDiv.innerHTML = '';
+            
+            // Nexus-specific processing steps
+            const nexusSteps = [
+                { 
+                    progress: 8, 
+                    text: 'Layer 1: Swift API authentication...', 
+                    log: '🔐 Layer 1: OAuth 2.0 + LAU authentication with Swift network'
+                },
+                { 
+                    progress: 15, 
+                    text: 'Nexus Gateway: Receiving payment instruction...', 
+                    log: '🌐 Nexus Gateway: pacs.008 received from Taiwan FISC'
+                },
+                { 
+                    progress: 23, 
+                    text: 'Layer 1: Swift BIC validation...', 
+                    log: '⚡ Layer 1: SwiftRef API - BIC validation successful (DBSSSGSGXXX)'
+                },
+                { 
+                    progress: 30, 
+                    text: 'Nexus: AML/CFT compliance screening...', 
+                    log: '🔍 Nexus: Purpose code SUPP validated for cross-border transfer'
+                },
+                { 
+                    progress: 38, 
+                    text: 'Nexus: FX rate calculation and locking...', 
+                    log: `💱 Nexus: FX rate locked - TWD/${destCountry} @ ${fxRates[destCountry]} for 60 seconds`
+                },
+                { 
+                    progress: 45, 
+                    text: 'Layer 2: ISO 20022 message processing...', 
+                    log: '📄 Layer 2: Converting to Nexus-enhanced pacs.008 format'
+                },
+                { 
+                    progress: 53, 
+                    text: 'Nexus: Routing optimization...', 
+                    log: `🔀 Nexus: Optimal routing path calculated TWD→${destCountry}`
+                },
+                { 
+                    progress: 60, 
+                    text: 'Layer 4: RISC-V TEE transaction signing...', 
+                    log: '🔒 Layer 4: Cross-border transaction signed with RISC-V hardware keys'
+                },
+                { 
+                    progress: 68, 
+                    text: 'Destination IPS: Processing domestic payment...', 
+                    log: `${nexusCountries[destCountry].flag} ${nexusCountries[destCountry].name}: Domestic pacs.008 generated`
+                },
+                { 
+                    progress: 75, 
+                    text: 'Nexus: Settlement coordination...', 
+                    log: '⚖️ Nexus: Settlement instructions sent to participating central banks'
+                },
+                { 
+                    progress: 83, 
+                    text: 'Layer 3: Blockchain settlement recording...', 
+                    log: '⛓️ Layer 3: Cross-border settlement recorded immutably on blockchain'
+                },
+                { 
+                    progress: 90, 
+                    text: 'Layer 1: Swift GPI confirmation...', 
+                    log: '⚡ Layer 1: Swift GPI tracking updated - payment status confirmed'
+                },
+                { 
+                    progress: 98, 
+                    text: 'Nexus: Final confirmations...', 
+                    log: '✅ Nexus: pacs.002 confirmation received from all parties'
+                },
+                { 
+                    progress: 100, 
+                    text: 'Payment completed in 57 seconds!', 
+                    log: `🎉 Nexus Payment SUCCESS: TWD ${Number(amount).toLocaleString()} → ${destCountry} ${(amount * fxRates[destCountry]).toFixed(2)} in 57s`
+                }
+            ];
+            
+            let stepIndex = 0;
+            const stepInterval = setInterval(() => {
+                if (stepIndex < nexusSteps.length) {
+                    const step = nexusSteps[stepIndex];
+                    progressBar.style.width = step.progress + '%';
+                    
+                    statusDiv.innerHTML = `
+                        <div class="alert alert-info">
+                            <div class="processing">${step.text}</div>
+                            <div style="font-size: 12px; margin-top: 5px;">${step.progress}% Complete</div>
+                        </div>
+                    `;
+                    
+                    const logEntry = document.createElement('div');
+                    logEntry.className = 'nexus-log-entry';
+                    logEntry.innerHTML = `
+                        <div class="log-timestamp">[${new Date().toLocaleTimeString()}]</div>
+                        <div class="log-content">${step.log}</div>
+                    `;
+                    logDiv.appendChild(logEntry);
+                    logDiv.scrollTop = logDiv.scrollHeight;
+                    
+                    stepIndex++;
+                } else {
+                    clearInterval(stepInterval);
+                    
+                    // Success display
+                    statusDiv.innerHTML = `
+                        <div class="nexus-success-card">
+                            <div class="success-icon">🎉</div>
+                            <div class="success-title">Nexus Cross-border Payment Completed</div>
+                            <div class="success-details">
+                                <div class="success-metric">
+                                    <div class="metric-label">Processing Time:</div>
+                                    <div class="metric-value">57 seconds</div>
+                                </div>
+                                <div class="success-metric">
+                                    <div class="metric-label">Nexus Transaction ID:</div>
+                                    <div class="metric-value">NXS_${Date.now()}</div>
+                                </div>
+                                <div class="success-metric">
+                                    <div class="metric-label">Swift UETR:</div>
+                                    <div class="metric-value">${generateUETR()}</div>
+                                </div>
+                                <div class="success-metric">
+                                    <div class="metric-label">Settlement Status:</div>
+                                    <div class="metric-value">COMPLETED</div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    updateSystemMetrics();
+                }
+            }, 850); // Slightly faster for 60s target
+        }
+
+        // Enhanced Swift API testing
+        async function testSwiftAPI(apiType) {
+            const resultDiv = document.getElementById('api-test-result');
+            resultDiv.innerHTML = `
+                <div class="alert alert-info">
+                    <strong>Testing Swift ${apiType} API...</strong>
+                    <div class="processing">Connecting to Swift network...</div>
+                </div>
+            `;
+            
+            setTimeout(() => {
+                const mockResponses = {
+                    'bic-validation': {
+                        endpoint: '/swiftref/bic-validation',
+                        method: 'GET',
+                        response_time: '487ms',
+                        data: {
+                            bic: 'DBSSSGSGXXX',
+                            institution_name: 'DBS Bank Ltd',
+                            country: 'Singapore',
+                            city: 'Singapore',
+                            status: 'ACTIVE',
+                            services: ['payments', 'securities', 'trade_finance']
+                        }
+                    },
+                    'gpi-tracking': {
+                        endpoint: '/gpi/payment-tracking',
+                        method: 'GET',
+                        response_time: '752ms',
+                        data: {
+                            uetr: generateUETR(),
+                            status: 'ACSC',
+                            last_update: new Date().toISOString(),
+                            tracking_events: [
+                                { status: 'ACCC', timestamp: '2025-07-25T14:30:15Z' },
+                                { status: 'ACSP', timestamp: '2025-07-25T14:30:45Z' },
+                                { status: 'ACSC', timestamp: '2025-07-25T14:31:12Z' }
+                            ]
+                        }
+                    },
+                    'payment-initiation': {
+                        endpoint: '/payment-initiation',
+                        method: 'POST',
+                        response_time: '1,234ms',
+                        data: {
+                            instruction_id: 'SWIFT_' + Date.now(),
+                            status: 'ACCEPTED',
+                            uetr: generateUETR(),
+                            estimated_completion: '2025-07-25T14:32:00Z'
+                        }
+                    }
+                };
+                
+                const response = mockResponses[apiType];
+                resultDiv.innerHTML = `
+                    <div class="alert alert-success">
+                        <strong>Swift API Test - SUCCESS</strong>
+                        <div style="margin-top: 10px;">
+                            <div><strong>Endpoint:</strong> ${response.endpoint}</div>
+                            <div><strong>Method:</strong> ${response.method}</div>
+                            <div><strong>Response Time:</strong> ${response.response_time}</div>
+                        </div>
+                        <div class="iso-message">
+                            ${JSON.stringify(response.data, null, 2)}
+                        </div>
+                    </div>
+                `;
+            }, 1500);
+        }
+
+        // Enhanced message conversion
+        function convertNexusMessage() {
+            const inputFormat = document.getElementById('input-format').value;
+            const messageInput = document.getElementById('message-input').value;
+            const resultDiv = document.getElementById('conversion-result');
+            
+            if (!messageInput.trim()) {
+                resultDiv.innerHTML = '<div class="alert alert-warning">Please enter a message to convert.</div>';
+                return;
+            }
+            
+            resultDiv.innerHTML = `
+                <div class="alert alert-info">
+                    <div class="processing">Converting ${inputFormat} to Nexus-enhanced ISO 20022 XML...</div>
+                </div>
+            `;
+            
+            setTimeout(() => {
+                const nexusMessage = `<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pacs.008.001.12" xmlns:nexus="urn:bis:nexus:extensions:v1.0">
+    <FIToFICstmrCdtTrf>
+        <GrpHdr>
+            <MsgId>NXS${Date.now()}</MsgId>
+            <CreDtTm>${new Date().toISOString()}</CreDtTm>
+            <NbOfTxs>1</NbOfTxs>
+            <CtrlSum>50000.00</CtrlSum>
+            <nexus:NexusGatewayId>NEXUS_ASEAN_01</nexus:NexusGatewayId>
+            <nexus:CrossBorderRoute>TWD_SGD_DIRECT</nexus:CrossBorderRoute>
+        </GrpHdr>
+        <CdtTrfTxInf>
+            <PmtId>
+                <InstrId>NXS${Date.now()}</InstrId>
+                <EndToEndId>TSMC_SUPPLY_${Date.now()}</EndToEndId>
+                <UETR>${generateUETR()}</UETR>
+                <nexus:NexusTransactionId>NXT_${Date.now()}</nexus:NexusTransactionId>
+            </PmtId>
+            <IntrBkSttlmAmt Ccy="TWD">50000.00</IntrBkSttlmAmt>
+            <nexus:DestinationAmount Ccy="SGD">2083.33</nexus:DestinationAmount>
+            <nexus:FXRate>0.04167</nexus:FXRate>
+            <nexus:FXRateLockTime>60</nexus:FXRateLockTime>
+            <ChrgBr>SLEV</ChrgBr>
+            <nexus:ProcessingPriority>TIME_CRITICAL</nexus:ProcessingPriority>
+            <Dbtr>
+                <Nm>Taiwan Semiconductor Manufacturing</Nm>
+                <PstlAdr>
+                    <StrtNm>No. 8, Li-Hsin Rd. 6</StrtNm>
+                    <TwnNm>Hsinchu</TwnNm>
+                    <Ctry>TW</Ctry>
+                </PstlAdr>
+            </Dbtr>
+            <DbtrAgt>
+                <FinInstnId>
+                    <BICFI>CTBCTWTP</BICFI>
+                    <nexus:IPSCode>TW_FISC</nexus:IPSCode>
+                </FinInstnId>
+            </DbtrAgt>
+            <nexus:DestinationIPS>SG_PAYNOW</nexus:DestinationIPS>
+            <CdtrAgt>
+                <FinInstnId>
+                    <BICFI>DBSSSGSGXXX</BICFI>
+                </FinInstnId>
+            </CdtrAgt>
+            <Cdtr>
+                <Nm>Singapore Tech Pte Ltd</Nm>
+                <PstlAdr>
+                    <Ctry>SG</Ctry>
+                </PstlAdr>
+            </Cdtr>
+            <CdtrAcct>
+                <Id>
+                    <nexus:ProxyId Type="mobile">+65-9123-4567</nexus:ProxyId>
+                </Id>
+            </CdtrAcct>
+            <Purp>
+                <Cd>SUPP</Cd>
+            </Purp>
+            <RmtInf>
+                <Ustrd>Supply Chain Finance Payment via BIS Nexus</Ustrd>
+            </RmtInf>
+        </CdtTrfTxInf>
+    </FIToFICstmrCdtTrf>
+</Document>`;
+                
+                resultDiv.innerHTML = `
+                    <div class="alert alert-success">
+                        <strong>Nexus Message Conversion Successful!</strong>
+                        <div style="margin-top: 10px;">
+                            <div><strong>Input Format:</strong> ${inputFormat.toUpperCase()}</div>
+                            <div><strong>Output Format:</strong> Nexus-Enhanced ISO 20022 XML</div>
+                            <div><strong>Message Type:</strong> pacs.008.001.12 (Cross-border Enhanced)</div>
+                            <div><strong>Nexus Extensions:</strong> Gateway routing, FX locking, Proxy resolution</div>
+                        </div>
+                    </div>
+                    <div class="iso-message">${nexusMessage}</div>
+                `;
+            }, 2000);
+        }
+
+        // Enhanced security operations with TEE visualization
+        async function executeEnhancedSecurityOperation() {
+            const operation = document.getElementById('security-operation').value;
+            const algorithm = document.getElementById('key-algorithm').value;
+            const data = document.getElementById('security-data').value;
+            const resultDiv = document.getElementById('security-result');
+            
+            resultDiv.innerHTML = `
+                <div class="tee-processing-container">
+                    <div class="tee-header">
+                        <h4>🔒 RISC-V TEE Processing</h4>
+                        <div class="tee-status-indicator">EXECUTING</div>
+                    </div>
+                    <div class="alert alert-info">
+                        <div class="processing">Executing ${operation} in Keystone enclave...</div>
+                        <div style="font-size: 12px; margin-top: 5px;">
+                            🔒 Entering secure hardware enclave...<br>
+                            🔒 Verifying remote attestation...<br>
+                            🔒 Processing cross-border operation...
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            setTimeout(() => {
+                const mockResults = {
+                    'generate': {
+                        operation: 'Cross-border Key Generation',
+                        publicKey: '0x04' + Array.from({length: 128}, () => Math.floor(Math.random() * 16).toString(16)).join(''),
+                        keyId: 'NEXUS_KEY_' + Date.now(),
+                        algorithm: algorithm,
+                        enclave: 'keystone-enclave-01',
+                        attestation: 'verified'
+                    },
+                    'sign': {
+                        operation: 'Nexus Transaction Signing',
+                        signature: '0x' + Array.from({length: 128}, () => Math.floor(Math.random() * 16).toString(16)).join(''),
+                        algorithm: algorithm,
+                        timestamp: new Date().toISOString(),
+                        transaction_hash: '0x' + Array.from({length: 64}, () => Math.floor(Math.random() * 16).toString(16)).join(''),
+                        nexus_compliant: true
+                    },
+                    'attest': {
+                        operation: 'TEE Attestation Generation',
+                        attestation_report: '0x' + Array.from({length: 256}, () => Math.floor(Math.random() * 16).toString(16)).join(''),
+                        enclave_measurement: '0x' + Array.from({length: 64}, () => Math.floor(Math.random() * 16).toString(16)).join(''),
+                        platform_config: 'RISC-V RV64GC + Keystone',
+                        security_version: 'v2.1.0'
+                    }
+                };
+                
+                const result = mockResults[operation] || mockResults['sign'];
+                resultDiv.innerHTML = `
+                    <div class="security-result-container">
+                        <div class="security-result-header">
+                            <span class="success-icon">✅</span>
+                            <h3 class="security-result-title">RISC-V TEE Operation Successful</h3>
+                        </div>
+                        
+                        <div class="security-result-grid">
+                            ${Object.entries(result).map(([key, value]) => `
+                                <div class="security-result-item">
+                                    <div class="label">${key.replace(/_/g, ' ')}</div>
+                                    <div class="value">${value}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        
+                        <div class="security-result-footer">
+                            <div><span class="checkmark">✅</span>Operation completed in secure Keystone enclave with EAL5+ certification</div>
+                            <div><span class="checkmark">✅</span>Cross-border transaction security verified</div>
+                            <div><span class="checkmark">✅</span>Hardware attestation successful</div>
+                        </div>
+                    </div>
+                `;
+                
+                systemState.keysManaged++;
+                updateDashboard();
+            }, 3000);
+        }
+
+        // Complete demo with all four layers
+        async function startCompleteDemo() {
+            const statusDiv = document.getElementById('demo-status');
+            const progressBar = document.getElementById('demo-progress-bar');
+            const progressText = document.getElementById('demo-progress-text');
+            const logDiv = document.getElementById('demo-log');
+            
+            progressBar.style.width = '0%';
+            progressText.textContent = 'Initializing complete four-layer demonstration...';
+            logDiv.innerHTML = '<div class="log-entry">🚀 Starting complete Nexus four-layer integration demo...</div>';
+            
+            statusDiv.innerHTML = `
+                <div class="alert alert-info">
+                    <strong>Complete Four-Layer Integration Demo</strong><br>
+                    <strong>Scenario:</strong> Taiwan enterprise → Singapore supplier<br>
+                    <strong>Amount:</strong> TWD 50,000 → SGD 2,083.33<br>
+                    <strong>Target:</strong> Complete processing in < 60 seconds
+                </div>
+            `;
+            
+            const completeSteps = [
+                { progress: 5, text: 'System initialization...', log: '🔧 System: Initializing four-layer architecture' },
+                { progress: 10, text: 'Layer 1: Swift API authentication...', log: '🔐 Layer 1: OAuth 2.0 + LAU authentication successful' },
+                { progress: 15, text: 'Layer 1: SwiftRef BIC validation...', log: '⚡ Layer 1: SwiftRef API - BIC codes validated' },
+                { progress: 20, text: 'Nexus Gateway: Connection established...', log: '🌐 Nexus: Gateway connection established with ASEAN-5' },
+                { progress: 25, text: 'Layer 2: ISO 20022 message parsing...', log: '📄 Layer 2: MT103 converted to ISO 20022 pacs.008' },
+                { progress: 30, text: 'Layer 2: Nexus message enhancement...', log: '📄 Layer 2: Message enhanced with Nexus extensions' },
+                { progress: 35, text: 'Nexus: Cross-border routing calculation...', log: '🔀 Nexus: Optimal routing path TWD→SGD calculated' },
+                { progress: 40, text: 'Nexus: FX rate locking...', log: '💱 Nexus: TWD/SGD rate locked at 0.04167 for 60s' },
+                { progress: 45, text: 'Nexus: AML/CFT screening...', log: '🔍 Nexus: Compliance screening passed - SUPP code validated' },
+                { progress: 50, text: 'Layer 4: RISC-V TEE activation...', log: '🔒 Layer 4: Keystone enclave activated for secure signing' },
+                { progress: 55, text: 'Layer 4: Cross-border transaction signing...', log: '🔒 Layer 4: Transaction signed with hardware ECDSA keys' },
+                { progress: 60, text: 'Layer 3: Smart contract deployment...', log: '⛓️ Layer 3: Cross-border settlement contract deployed' },
+                { progress: 65, text: 'Layer 3: Blockchain transaction recording...', log: '⛓️ Layer 3: Transaction recorded on consortium blockchain' },
+                { progress: 70, text: 'Nexus: Settlement coordination...', log: '⚖️ Nexus: Multi-party settlement coordination initiated' },
+                { progress: 75, text: 'Singapore PayNow: Domestic processing...', log: '🇸🇬 Singapore: PayNow domestic payment initiated' },
+                { progress: 80, text: 'Layer 1: Swift GPI tracking update...', log: '⚡ Layer 1: GPI tracker updated - ACSC status confirmed' },
+                { progress: 85, text: 'Layer 3: Settlement finalization...', log: '⛓️ Layer 3: Settlement finalized and recorded immutably' },
+                { progress: 90, text: 'Nexus: Final confirmations...', log: '✅ Nexus: pacs.002 confirmations received from all parties' },
+                { progress: 95, text: 'Layer 2: Status message generation...', log: '📄 Layer 2: ISO 20022 status messages generated' },
+                { progress: 100, text: 'Complete integration successful!', log: '🎉 SUCCESS: Complete four-layer Nexus integration in 56 seconds!' }
+            ];
+            
+            let stepIndex = 0;
+            const stepInterval = setInterval(() => {
+                if (stepIndex < completeSteps.length) {
+                    const step = completeSteps[stepIndex];
+                    progressBar.style.width = step.progress + '%';
+                    progressText.textContent = step.text;
+                    
+                    const logEntry = document.createElement('div');
+                    logEntry.className = 'log-entry';
+                    logEntry.textContent = `[${new Date().toLocaleTimeString()}] ${step.log}`;
+                    logDiv.appendChild(logEntry);
+                    logDiv.scrollTop = logDiv.scrollHeight;
+                    
+                    stepIndex++;
+                } else {
+                    clearInterval(stepInterval);
+                    
+                    statusDiv.innerHTML = `
+                        <div class="nexus-success-card">
+                            <div class="success-icon">🏆</div>
+                            <div class="success-title">Complete Four-Layer Integration Successful</div>
+                            <div class="success-details">
+                                <div class="success-metric">
+                                    <div class="metric-label">Total Processing Time:</div>
+                                    <div class="metric-value">56 seconds</div>
+                                </div>
+                                <div class="success-metric">
+                                    <div class="metric-label">Layers Integrated:</div>
+                                    <div class="metric-value">4/4 Complete</div>
+                                </div>
+                                <div class="success-metric">
+                                    <div class="metric-label">Nexus Compliance:</div>
+                                    <div class="metric-value">✅ Verified</div>
+                                </div>
+                                <div class="success-metric">
+                                    <div class="metric-label">Security Level:</div>
+                                    <div class="metric-value">EAL5+ Achieved</div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    systemState.totalTransactions++;
+                    updateDashboard();
+                }
+            }, 800);
+        }
+
+        // Asset tokenization function
+        function tokenizeAsset() {
+            const assetType = document.getElementById('asset-type').value;
+            const isinCode = document.getElementById('isin-code').value;
+            const nominalValue = document.getElementById('nominal-value').value;
+            const maturityDate = document.getElementById('maturity-date').value;
+            const issuer = document.getElementById('issuer').value;
+            const resultDiv = document.getElementById('tokenization-result');
+            
+            if (!isinCode || !nominalValue || !issuer) {
+                resultDiv.innerHTML = '<div class="alert alert-warning">Please fill in all required fields.</div>';
+                return;
+            }
+            
+            resultDiv.innerHTML = `
+                <div class="alert alert-info">
+                    <div class="processing">Tokenizing ${assetType} with RISC-V security...</div>
+                    <div style="font-size: 12px; margin-top: 5px;">
+                        ⏳ Validating asset information...<br>
+                        ⏳ Generating smart contract...<br>
+                        ⏳ RISC-V TEE signing...
+                    </div>
+                </div>
+            `;
+            
+            setTimeout(() => {
+                const tokenId = 'AIMTK' + String(Math.floor(Math.random() * 1000)).padStart(3, '0');
+                const contractAddress = '0x' + Array.from({length: 40}, () => Math.floor(Math.random() * 16).toString(16)).join('');
+                
+                resultDiv.innerHTML = `
+                    <div class="alert alert-success">
+                        <strong>Asset Tokenization Successful!</strong>
+                        <div style="margin-top: 15px;">
+                            <div><strong>Token ID:</strong> ${tokenId}</div>
+                            <div><strong>Contract Address:</strong> ${contractAddress}</div>
+                            <div><strong>Block Number:</strong> ${systemState.currentBlock + 1}</div>
+                            <div><strong>RISC-V Signature:</strong> 0x${Array.from({length: 64}, () => Math.floor(Math.random() * 16).toString(16)).join('')}</div>
+                            <div><strong>Security Level:</strong> EAL5+ Hardware Verified</div>
+                        </div>
+                        <div style="margin-top: 10px; font-size: 12px; color: #666;">
+                            Token deployed with hardware-level security and ready for cross-border trading.
+                        </div>
+                    </div>
+                `;
+                
+                systemState.currentBlock++;
+                updateDashboard();
+            }, 3000);
+        }
+
+        // Utility functions
+        function generateUETR() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                const r = Math.random() * 16 | 0;
+                const v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        function updateDashboard() {
+            document.getElementById('total-transactions').textContent = systemState.totalTransactions;
+            document.getElementById('connected-countries').textContent = systemState.connectedCountries;
+            
+            const activityLog = document.getElementById('recent-activity');
+            const newEntry = document.createElement('div');
+            newEntry.className = 'log-entry';
+            newEntry.textContent = `[${new Date().toLocaleTimeString()}] System update - Transactions: ${systemState.totalTransactions}, Countries: ${systemState.connectedCountries}`;
+            activityLog.insertBefore(newEntry, activityLog.firstChild);
+            
+            while (activityLog.children.length > 8) {
+                activityLog.removeChild(activityLog.lastChild);
+            }
+        }
+
+        function updateSystemMetrics() {
+            systemState.totalTransactions++;
+            systemState.avgProcessingTime = Math.max(55, systemState.avgProcessingTime - 0.5);
+            updateDashboard();
+        }
+
+        function showModal(type, content) {
+            const modal = document.getElementById('detailModal');
+            const modalBody = document.getElementById('modal-content-body');
+            modalBody.innerHTML = content;
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('detailModal').style.display = 'none';
+        }
+
+        // Auto-update system metrics
+        setInterval(() => {
+            systemState.blockTime = (2.5 + Math.random() * 0.8).toFixed(1);
+            systemState.consensusRate = (99.5 + Math.random() * 0.5).toFixed(1);
+            
+            if (document.getElementById('dashboard').classList.contains('active')) {
+                updateDashboard();
+            }
+        }, 8000);
+
+        // Initialize the system
+        window.addEventListener('load', () => {
+            console.log('Enhanced RISC-V ISO 20022 Nexus Platform Initialized');
+            renderNexusCountries();
+            updateFXRate();
+            updateDashboard();
+            
+            // Add some initial activity to the dashboard
+            setTimeout(() => {
+                const activities = [
+                    '🌍 Nexus Gateway: Connected to 5 ASEAN countries',
+                    '⚡ Swift API: All endpoints operational',
+                    '🔒 RISC-V TEE: Hardware security modules active',
+                    '📄 ISO 20022: Message processing engines ready',
+                    '⛓️ Blockchain: Consortium network synchronized'
+                ];
+                
+                const activityLog = document.getElementById('recent-activity');
+                activities.forEach((activity, index) => {
+                    setTimeout(() => {
+                        const logEntry = document.createElement('div');
+                        logEntry.className = 'log-entry';
+                        logEntry.textContent = `[${new Date().toLocaleTimeString()}] ${activity}`;
+                        activityLog.appendChild(logEntry);
+                    }, index * 500);
+                });
+            }, 1000);
+        });
+
+        // Handle window clicks for modal
+        window.onclick = function(event) {
+            const modal = document.getElementById('detailModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+
+        // Additional helper functions for enhanced features
+        function simulateNetworkLatency() {
+            return Math.floor(Math.random() * 100) + 50;
+        }
+
+        function generateTransactionHash() {
+            return '0x' + Array.from({length: 64}, () => Math.floor(Math.random() * 16).toString(16)).join('');
+        }
+
+        function formatCurrency(amount, currency) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: currency,
+                minimumFractionDigits: 2
+            }).format(amount);
+        }
+
+        // Enhanced error handling
+        function handleError(operation, error) {
+            console.error(`Error in ${operation}:`, error);
+            return `
+                <div class="alert alert-warning">
+                    <strong>Operation Warning:</strong> ${operation} encountered an issue. 
+                    Please try again or contact system administrator.
+                </div>
+            `;
+        }
+
+        // Performance monitoring
+        function logPerformanceMetric(operation, startTime) {
+            const endTime = performance.now();
+            const duration = endTime - startTime;
+            console.log(`Performance: ${operation} completed in ${duration.toFixed(2)}ms`);
+        }
+    </script>
+</body>
+</html>
